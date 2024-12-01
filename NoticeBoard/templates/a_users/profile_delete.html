@@ -1,0 +1,17 @@
+{% extends 'layouts/c.html' %}
+
+{% block layout %}
+<content class="block max-w-3xl mx-auto my-12 px-6">
+
+    <div class="card p-8 !pb--10">
+<h1>Delete Account</h1>
+<p>Are you sure you want to delete your account?</p>
+
+<form method='POST'>
+    {% csrf_token %}
+    <button type="submit" class="btn-red mt-6">Yes, I want to delete my account</button>
+    <a class="button secondaryAction ml-1" href="{% url 'home' %}">Cancel</a>
+</form>
+</div>    
+</content>
+{% endblock %}
