@@ -96,10 +96,12 @@ def post_page_view(request, pk):
     post = get_object_or_404(Post, id=pk)
     
     commentform = CommentCreateForm()
+    replyform = ReplyCreateForm()
     
     context = {
         'post': post,
-        'commentform': commentform
+        'commentform': commentform,
+        'replyform' : replyform
     }
     
     return render(request, 'a_posts/post_page.html', context)  # Render confirmation page.
@@ -118,3 +120,40 @@ def comment_sent(request, pk):
             
     return redirect('post', post.id)
 
+@login_required
+def comment_delete_view(request, pk):
+    post = get_object_or_404(Comment, id=pk, author = request.user)
+    
+    if request.method == "POST":
+        post.delete()
+        messages.success(request, 'Comment Deleted')
+        
+        return redirect('post', post.parent_post.id)
+    
+    return render(request, 'a_posts/comment_delete.html', {'comment': post})  # Render confirmation page.
+
+@login_required
+def reply_sent(request, pk):
+    comment = get_object_or_404(Comment, id=pk)
+    
+    if request.method == 'POST':
+        form = ReplyCreateForm(request.POST)
+        if form.is_valid:
+            reply = form.save(commit=False)
+            reply.author = request.user
+            reply.parent_comment = comment
+            reply.save()
+            
+    return redirect('post', comment.parent_post.id)
+
+@login_required
+def reply_delete_view(request, pk):
+    reply = get_object_or_404(Reply, id=pk, author = request.user)
+    
+    if request.method == "POST":
+        reply.delete()
+        messages.success(request, 'Reply Deleted')
+        
+        return redirect('post', reply.parent_comment.parent_post.id)
+    
+    return render(request, 'a_posts/reply_delete.html', {'reply': reply})  # Render confirmation page.
