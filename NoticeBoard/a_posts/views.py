@@ -60,12 +60,16 @@ def post_create_view(request):
 
 @login_required
 def post_delete_view(request, pk):
-    post = get_object_or_404(Post, id=pk, author = request.user)
-    
+    if request.user.is_staff:
+        post = get_object_or_404(Post, id=pk)
+    else:
+        post = get_object_or_404(Post, id=pk, author = request.user)
     if request.method == "POST":
         post.delete()
-        messages.success(request, 'Post Deleted')
-        
+        if request.user.is_staff:
+            messages.success(request, 'Admin: Post Deleted')
+        else:
+            messages.success(request, 'Post Deleted')
         return redirect('home')
     
     return render(request, 'a_posts/post_delete.html', {'post': post})  # Render confirmation page.
@@ -169,3 +173,27 @@ def like_post(request, pk):
             post.likes.add(request.user)
 
     return redirect('post', post.id)
+
+def like_comment(request, pk):
+    comment = get_object_or_404(Comment, id=pk)
+    user_exist = comment.likes.filter(username=request.user.username).exists()
+
+    if comment.author != request.user:
+        if user_exist:
+            comment.likes.remove(request.user)
+        else:
+            comment.likes.add(request.user)
+
+    return redirect('post', pk=comment.parent_post.id)
+
+def like_reply(request, pk):
+    reply = get_object_or_404(Reply, id=pk)
+    user_exist = reply.likes.filter(username=request.user.username).exists()
+
+    if reply.author != request.user:
+        if user_exist:
+            reply.likes.remove(request.user)
+        else:
+            reply.likes.add(request.user)
+
+    return redirect('post', pk=reply.parent_comment.parent_post.id)

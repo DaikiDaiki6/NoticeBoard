@@ -56,7 +56,12 @@
                 {% endif %}
                 {% if user.is_authenticated and user == post.author %}
                     <a href="{% url 'post-edit' post.id %}">Edit</a>
+                {% endif %}
+                {% if user.is_authenticated and user == post.author %}
                     <a href="{% url 'post-delete' post.id %}">Delete</a>
+                {% endif %}
+                {% if user.is_staff %}
+                    <a href="{% url 'post-delete' post.id %}">Admin Delete</a>
                 {% endif %}
             </div>
         </div>
