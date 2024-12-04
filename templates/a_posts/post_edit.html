@@ -12,7 +12,7 @@
     </div>
     
     <div class="pb-2">
-        <form method='POST'>
+        <form method='POST' enctype="multipart/form-data">
             {% csrf_token %}
             {{ form }}
             <div class="pt-4">

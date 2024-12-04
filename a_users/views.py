@@ -16,7 +16,7 @@ def profile_view(request, username=None):
             profile = request.user.profile
         except:
             raise Http404()
-    posts = Post.objects.filter(author=request.user)
+    posts = Post.objects.all()
     context = {
         'profile': profile,
         'posts': posts

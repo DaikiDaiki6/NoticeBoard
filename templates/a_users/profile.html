@@ -36,7 +36,11 @@
 
         {% if posts %}
             {% for post in posts %}
-                {% include 'a_posts/post.html' %}
+                {% if post.author == profile.user %}
+                        {% include 'a_posts/post_1.html' %}
+                {% else %}
+                        <center></center><b>No posts available.</b></center>
+                {% endif %}
             {% endfor %}
         {% else %}
             <center></center><b>No posts available.</b></center>

@@ -2,10 +2,15 @@
 
 {% block content %}
 
-{% for post in posts %}
+{% if posts %}
+    {% for post in posts %}
 
-{% include 'a_posts/post.html' %}
+        {% include 'a_posts/post.html' %}
 
-{% endfor %}
+    {% endfor %}
+{% else %}
+        <center><h2>No posts available.</h2></center>
+{% endif %}
+
 
 {% endblock %}
