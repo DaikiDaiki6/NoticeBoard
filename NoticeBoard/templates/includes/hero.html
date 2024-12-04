@@ -1,0 +1,17 @@
+{% load static %}
+
+<hero class="grid bg-gray-700 text-white text-center bg-cover z-10 relative"
+      style="background-image: url('{% static 'images/background-hero.jpg' %}'); background-size: cover; background-position: center;">
+    <!-- Overlay to dim the background -->
+    <div class="col-start-1 row-start-1 bg-gray-800 bg-opacity-40 w-full h-full"></div>
+
+    <!-- Content on top of the background -->
+    <div class="col-start-1 row-start-1 py-24 px-10">
+        <h1 class="font1 text-6xl title-fadein">Notice Board</h1>
+        <p class="text-lg font-bold mb-5">Share Your Announcements on Notice Board! 📢✨</p>
+
+        {% if not user.is_authenticated %}
+        <a class="button" href="{% url 'account_signup' %}">Get Started</a>
+        {% endif %}
+    </div>
+</hero>
